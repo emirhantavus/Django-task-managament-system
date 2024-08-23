@@ -43,10 +43,19 @@ class UserTokenAuthTest(APITestCase):
             #get token after login
             url = reverse('token_obtain_pair') # api/token/
             data = {
-                  'email':'authtest@mail.co',
+                  'email':'authtest@mail.com',
                   'password':'123456'
             }
             resp = self.client.post(url,data)
             self.assertEqual(resp.status_code, status.HTTP_200_OK)
-            self.assertIn('access', resp.data)
-            self.assertIn('refresh', resp.data) ## error with 401 status code.
+            self.assertIn('access', resp.data)  # error with 401 status code when email is wrong;
+            self.assertIn('refresh', resp.data)  # but when it's right, status code is 200 ok
+            
+      def test_invalid_login(self):
+            url = reverse('token_obtain_pair') # with wrong email and pass, can't login and get token
+            data = {
+                  'email':'authtestwrong@mail.com',
+                  'password':'wrongpass'
+            }
+            resp = self.client.post(url,data)
+            self.assertEqual(resp.status_code,status.HTTP_401_UNAUTHORIZED)
