@@ -1,6 +1,6 @@
 from django.test import TestCase
-from .models import User , CustomUserManager
-
+from .models import User
+from django.shortcuts import get_object_or_404
 
 class UserModelTest(TestCase):
       def setUp(self):
@@ -30,7 +30,7 @@ class UserModelTest(TestCase):
 
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase , APIClient
 
 class UserTokenAuthTest(APITestCase):
       def setUp(self):
@@ -59,3 +59,30 @@ class UserTokenAuthTest(APITestCase):
             }
             resp = self.client.post(url,data)
             self.assertEqual(resp.status_code,status.HTTP_401_UNAUTHORIZED)
+            
+
+class GetUserListTest(TestCase):
+      def setUp(self):
+            self.client = APIClient()
+            
+            self.user1 = User.objects.create_user(
+            email='user1@mail.com',
+            password='123456',
+            first_name='User',
+            last_name='One'
+        )
+            self.user2 = User.objects.create_user(
+            email='user2@mail.com',
+            password='123456',
+            first_name='User',
+            last_name='Two'
+        )
+            
+            
+      def test_users_page_exists(self):
+            url = reverse('user-list') #'/api/users'
+            resp = self.client.get(url)
+            self.assertEqual(resp.status_code,status.HTTP_200_OK)
+            
+      def test_single_user(self):
+            users = User.objects.get(email='user1@mail.com')
