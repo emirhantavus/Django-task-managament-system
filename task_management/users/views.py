@@ -14,10 +14,11 @@ class UserView(APIView):
       
 class UserRegisterView(APIView):
       permission_classes =[AllowAny,]
+      
       def post(self, request):
-       serializer = UserSerializers(data=request.data)
-       if serializer.is_valid():
-           user = serializer.save()
-           tokens = user.tokens()
-           return Response(tokens, status.HTTP_201_CREATED)
-       return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            serializer = UserSerializers(data=request.data)
+            if serializer.is_valid():
+                  user = serializer.save()
+                  tokens = user.tokens()
+                  return Response(tokens, status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

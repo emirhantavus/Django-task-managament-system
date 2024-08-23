@@ -1,6 +1,5 @@
 from django.test import TestCase
 from .models import User
-from django.shortcuts import get_object_or_404
 
 class UserModelTest(TestCase):
       def setUp(self):
