@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 router = DefaultRouter()
-router.register(r'projects',ProjectViewSet)
+router.register(r'',ProjectViewSet,basename='project')
 
 urlpatterns = [
 

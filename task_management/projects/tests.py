@@ -2,6 +2,7 @@ from django.test import TestCase
 from projects.models import Project
 from rest_framework.test import APIClient , APITestCase
 from rest_framework import status
+from django.urls import reverse
 # Create your tests here.
 
 class ProjectModelTest(TestCase):
@@ -27,8 +28,9 @@ class ProjectModelTest(TestCase):
             self.assertEqual(str(self.project),'project1')
             
       def test_project_page_exists(self):
-            url = self.client.get('/api/projects/')
-            self.assertEqual(url.status_code,status.HTTP_200_OK) # Failed until we create /api/projects url.
+            url = reverse('project-list')
+            resp = self.client.get(url)
+            self.assertEqual(resp.status_code,status.HTTP_200_OK) # Failed until we create /api/projects url.
             
       def test_list_all_projects(self):
            projects = Project.objects.all()
