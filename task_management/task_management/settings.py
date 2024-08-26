@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'jazzmin',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 REST_FRAMEWORK = {
@@ -119,6 +121,10 @@ CACHES = {
         }
     }
 }
+from decouple import config
+
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_BROKER_URL = config('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
 
 
 # Password validation
