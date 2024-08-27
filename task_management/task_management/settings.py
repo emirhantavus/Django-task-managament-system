@@ -32,6 +32,7 @@ AUTH_USER_MODEL = 'users.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,6 @@ INSTALLED_APPS = [
     'tasks',
     'projects',
     'users',
-    'jazzmin',
     'rest_framework',
     'rest_framework_simplejwt',
     'django_celery_beat',
