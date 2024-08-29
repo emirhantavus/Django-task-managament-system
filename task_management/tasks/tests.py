@@ -68,3 +68,9 @@ class TaskTestCase(TestCase):
             self.assertEqual(tasks[0].user.email,'anotheruser@mail.com')
             self.assertEqual(tasks.count(),1)
             self.assertEqual(tasks[0].title,'new_task_title')
+            
+      def test_get_all_tasks(self):
+            response = self.client.get('/api/tasks/')
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(len(response.data),1)
+            self.assertEqual(response.data[0]['title'],'task')
