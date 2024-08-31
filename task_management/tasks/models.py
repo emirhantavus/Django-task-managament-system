@@ -7,10 +7,16 @@ User = get_user_model()
 
 class Task(models.Model):
       project = models.ForeignKey(Project,related_name='tasks',on_delete=models.CASCADE)
-      user = models.ForeignKey(User,related_name='tasks',on_delete=models.CASCADE)
+      user = models.ManyToManyField(User,related_name='tasks')
       title = models.CharField(max_length=255)
       description = models.TextField(blank=True)
       completed = models.BooleanField(default=False)
+      
+      def complete_task(self):
+            self.completed = True
+            self.save()
+            from .tasks import send_task_notification
+            send_task_notification(self)
       
       def __str__(self):
             return self.title
