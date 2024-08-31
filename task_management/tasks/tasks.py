@@ -10,8 +10,7 @@ def send_task_notification(task_id):
             subject = f"Task '{task.title}' completed"
             message = f"{task.user.email}, \n Task '{task.title}' in project {task.project.name} is completed"
             user_message_list = [task.user.email]
-            send_mail(subject,message,settings.DEFAULT_FROM_EMAIL,user_message_list)
+            send_mail(subject,message,'whisber1@gmail.com',user_message_list,fail_silently=False)
       except Task.DoesNotExist:
             return 'task does not exist'
-      
       return f"Notification sent for task : {task.title}"

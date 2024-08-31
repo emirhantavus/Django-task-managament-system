@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from tasks.repositories.task_repository import TaskRepository
 from tasks.services.task_service import TaskService
+from .tasks import send_task_notification
 
 class TaskViewSet(ModelViewSet):
       queryset = Task.objects.all()
@@ -32,3 +33,14 @@ class TaskListCreateAPIView(APIView):
             except ValueError as e:
                   return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             
+class TaskCompleteView(APIView):
+    def patch(self, request, pk):
+        try:
+            task = Task.objects.get(pk=pk)
+            task.completed = True
+            task.save()
+            send_task_notification.delay(task.id)
+            serializer = TaskSerializers(task)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)

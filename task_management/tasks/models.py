@@ -16,7 +16,7 @@ class Task(models.Model):
             self.completed = True
             self.save()
             from .tasks import send_task_notification
-            send_task_notification(self)
+            send_task_notification.delay(self.id)
       
       def __str__(self):
             return self.title
