@@ -2,6 +2,8 @@ from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
 from tasks.models import Task
+from django.utils import timezone
+from datetime import timedelta
 
 @shared_task
 def send_task_notification(task_id):
@@ -14,3 +16,15 @@ def send_task_notification(task_id):
       except Task.DoesNotExist:
             return 'task does not exist'
       return f"Notification sent for task : {task.title}"
+
+@shared_task
+def check_task_deadlines():
+      deadline_task = Task.objects.filter(deadline = timezone.now() + timedelta(hours=24),is_complete=False)
+      for task in deadline_task:
+            send_mail(
+                  subject=f"upcoming task : {task.title}",
+                  message = f"Heyy, {task.title} task is due on {task.deadline}. More attention !!!",
+                  from_email= 'test@mail.com',
+                  recipient_list=[task.email]
+            )
+      return "test"
