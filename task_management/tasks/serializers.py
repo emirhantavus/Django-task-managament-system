@@ -7,7 +7,7 @@ class TaskSerializers(serializers.ModelSerializer):
       
       class Meta:
             model = Task
-            fields = ('id','title','description','project_name','completed','user_emails')
+            fields = ('id','title','description','project_name','completed','deadline','user_emails')
       
       def get_user_emails(self, obj):
             return [user.email for user in obj.user.all()]

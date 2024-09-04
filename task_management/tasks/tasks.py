@@ -19,12 +19,13 @@ def send_task_notification(task_id):
 
 @shared_task
 def check_task_deadlines():
-      deadline_task = Task.objects.filter(deadline = timezone.now() + timedelta(hours=24),is_complete=False)
+      deadline_task = Task.objects.filter(deadline = timezone.now() + timedelta(hours=24),completed=False)
       for task in deadline_task:
-            send_mail(
-                  subject=f"upcoming task : {task.title}",
-                  message = f"Heyy, {task.title} task is due on {task.deadline}. More attention !!!",
-                  from_email= 'test@mail.com',
-                  recipient_list=[task.email]
-            )
+            for users in task.user.all():
+                  send_mail(
+                        subject=f"upcoming task : {task.title}",
+                        message = f"Heyy, {task.title} task is due on {task.deadline}. More attention !!!",
+                        from_email= 'test@mail.com',
+                        recipient_list=[users.email]
+                  )
       return "test"

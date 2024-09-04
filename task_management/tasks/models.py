@@ -11,6 +11,7 @@ class Task(models.Model):
       title = models.CharField(max_length=255)
       description = models.TextField(blank=True)
       completed = models.BooleanField(default=False)
+      deadline = models.DateTimeField(null=True, blank=True)
       
       def complete_task(self):
             self.completed = True
