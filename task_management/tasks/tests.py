@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.core import mail
+from django.core.mail import send_mail
 from tasks.models import Task
 from projects.models import Project
+from django.conf import settings
 
 User = get_user_model()
 
@@ -74,7 +75,17 @@ class TaskTestCase(TestCase):
 
             
       def test_get_all_tasks(self):
-        response = self.client.get('/api/tasks/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['title'], 'task')
+            response = self.client.get('/api/tasks/')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(response.json()), 1)
+            self.assertEqual(response.json()[0]['title'], 'task')
+        
+class EmailTestCase(TestCase):
+    def test_email(self):
+        send_mail(
+            'Test Email',
+            'This is a test email.',
+            settings.EMAIL_HOST_USER,
+            ['emirhantavus17@gmail.com'],
+            fail_silently=False,
+        )            

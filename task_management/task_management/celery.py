@@ -13,8 +13,11 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'check_task_deadlines': {
         'task': 'tasks.check_task_deadlines',
-        'schedule': crontab(minute=0, hour='*/1'),
+        'schedule': crontab(minute='*/2'),
     },
 }
 
 app.autodiscover_tasks()
+
+def debug_task(self):
+    print(f'request: {self.request!r}')
