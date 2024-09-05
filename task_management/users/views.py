@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny , IsAdminUser
 from rest_framework import status
 from django.contrib.auth import authenticate , login ,logout
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import Group
 
 class UserView(APIView):
       permission_classes = [IsAdminUser,]
@@ -42,3 +43,12 @@ class UserLoginView(APIView):
                   'refresh':str(refresh),
                   'access':str(refresh.access_token),
                   })
+            
+class UserRoleView(APIView):
+      permission_classes = [IsAdminUser,]
+      
+      def post(self,request):
+            user = request.data.get('email')
+            developer_group = Group.objects.get(name='Developer')
+            user.groups.add(developer_group)
+            return Response({'message':'Successful..'},status=status.HTTP_200_OK)
