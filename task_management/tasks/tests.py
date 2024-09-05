@@ -83,8 +83,8 @@ class TaskTestCase(TestCase):
 class EmailTestCase(TestCase):
     def test_email(self):
         send_mail(
-            'Test Email',
-            'This is a test email.',
+            'Test',
+            'test case',
             settings.EMAIL_HOST_USER,
             ['emirhantavus17@gmail.com'],
             fail_silently=False,
