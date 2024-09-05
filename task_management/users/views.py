@@ -48,7 +48,24 @@ class UserRoleView(APIView):
       permission_classes = [IsAdminUser,]
       
       def post(self,request):
-            user = request.data.get('email')
-            developer_group = Group.objects.get(name='Developer')
-            user.groups.add(developer_group)
-            return Response({'message':'Successful..'},status=status.HTTP_200_OK)
+            email = request.data.get('email')
+            role = request.data.get('role')
+            try:
+                  user = User.objects.get(email=email)
+                  if_user_has_group = user.groups.values_list('name',flat=True)
+                  if role in if_user_has_group:
+                        return Response({'message':'user has already a role'})
+                  if role == 'Project Manager':
+                        group_name = 'Project Manager'
+                  elif role == 'Developer':
+                        group_name = 'Developer'
+                  else:
+                        return Response({'message':'wrong role !!!'})
+                  
+                  group = Group.objects.get(name=group_name)
+                  user.groups.add(group)
+                  return Response({'message':'Successful..'},status=status.HTTP_200_OK)
+            except user.DoesNotExist:
+                  return Response({'message':'user not found'},status=status.HTTP_404_NOT_FOUND)
+            except Group.DoesNotExist:
+                  return Response({'message':'group does not exist'})
